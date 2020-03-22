@@ -1,5 +1,10 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 '''
 THIS CLASS ASSUMES ALL <IFRAME>'S HAVE AN ID ATTRIBUTE
+THIS CLASS ASSUMES ASYNC <IFRAME>'S WILL BE ADDED TO THE DOM AT THE default_content() LEVEL
 '''
 
 __author__ = "Todd Kingham"
@@ -73,8 +78,10 @@ class Iframes():
         # create a new mapping in self.iframes in case the
         # requested <iframe> didn't exist when the page loaded.
         if key not in self.iframes:
-            self.__map__([])
+            wait = WebDriverWait(self.driver, 300)
+            wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, key)))
 
-        # loop over the list off ancestor frames until we reach the level of the <iframe> requested
-        for iframe in self.iframes[key]:
-            self.driver.switch_to.frame(iframe)
+        else:
+            # loop over the list off ancestor frames until we reach the level of the <iframe> requested
+            for iframe in self.iframes[key]:
+                self.driver.switch_to.frame(iframe)
