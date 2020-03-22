@@ -78,6 +78,7 @@ class Iframes():
         # create a new mapping in self.iframes in case the
         # requested <iframe> didn't exist when the page loaded.
         if key not in self.iframes:
+            self.__map__([])
             wait = WebDriverWait(self.driver, 300)
             wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, key)))
 
